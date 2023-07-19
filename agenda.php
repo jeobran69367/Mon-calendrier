@@ -1,5 +1,16 @@
 <?php
-	include('conf.php');
+session_start();
+
+if (!isset($_SESSION['utilisateur_id'])) {
+    header("Location: connexion.php");
+    exit();
+}
+
+// Reste du code de la page admin
+// ...
+?>
+<?php
+include('conf.php');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -9,15 +20,15 @@
 <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <?php
-$list_fer=array(7);//Liste pour les jours ferié; EX: $list_fer=array(7,1)==>tous les dimanches et les Lundi seront des jours fériers
+$list_fer = array(7); // Liste pour les jours fériés ; EX: $list_fer = array(7, 1) ==> tous les dimanches et les Lundis seront des jours fériés
 
-$sql="select dt from agenda";
-$req=mysql_query($sql);
-$k=0;
-while($data=mysql_fetch_array($req))
-{
-	$list_spe[$k]=$data[0];
-	$k++;
+$conn = connex($adr_base, $log_base, $pass_base, $base); // Obtenez la connexion mysqli en utilisant la fonction connex()
+$sql = "SELECT dt FROM agenda";
+$req = mysqli_query($conn, $sql); // Utilisez la connexion mysqli ici
+$k = 0;
+while ($data = mysqli_fetch_array($req)) {
+    $list_spe[$k] = $data[0];
+    $k++;
 }
 if($k==0)
 	$list_spe[0]="";
